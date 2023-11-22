@@ -1,4 +1,4 @@
-import { Wallet, Contract, ContractFactory, utils, Signer } from 'ethers'
+import { Wallet, Contract, ContractFactory, utils } from 'ethers'
 import cbor from 'cbor'
 
 import { simulateScript } from './simulateScript'
@@ -33,8 +33,8 @@ import type {
 } from './types'
 
 export const startLocalFunctionsTestnet = async (
+  admin: Wallet,
   simulationConfigPath?: string,
-  admin: Signer
 ): Promise<LocalFunctionsTestnet> => {
 
   const contracts = await deployFunctionsOracle(admin)

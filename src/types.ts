@@ -237,11 +237,9 @@ export type GetFunds = (
 ) => Promise<void>
 
 export type LocalFunctionsTestnet = {
-  server: Server
   adminWallet: {
     address: string
     privateKey: string
   }
   getFunds: GetFunds
-  close: () => Promise<void>
 } & FunctionsContracts
