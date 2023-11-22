@@ -1,5 +1,4 @@
-import { Wallet, Contract, ContractFactory, utils, providers } from 'ethers'
-import Ganache from 'ganache'
+import { Wallet, Contract, ContractFactory, utils, Signer } from 'ethers'
 import cbor from 'cbor'
 
 import { simulateScript } from './simulateScript'
@@ -23,7 +22,6 @@ import {
   TermsOfServiceAllowListSource,
 } from './v1_contract_sources'
 
-import type { ServerOptions } from 'ganache'
 
 import type {
   FunctionsRequestParams,
@@ -36,24 +34,8 @@ import type {
 
 export const startLocalFunctionsTestnet = async (
   simulationConfigPath?: string,
-  options?: ServerOptions,
-  port = 8545,
+  admin: Signer
 ): Promise<LocalFunctionsTestnet> => {
-  const server = Ganache.server(options)
-
-  server.listen(port, 'localhost', (err: Error | null) => {
-    if (err) {
-      throw Error(`Error starting local Functions testnet server:\n${err}`)
-    }
-    console.log(`Local Functions testnet server started on port ${port}`)
-  })
-
-  const accounts = server.provider.getInitialAccounts()
-  const firstAccount = Object.keys(accounts)[0]
-  const admin = new Wallet(
-    accounts[firstAccount].secretKey.slice(2),
-    new providers.JsonRpcProvider(`http://localhost:${port}`),
-  )
 
   const contracts = await deployFunctionsOracle(admin)
 
@@ -121,20 +103,14 @@ export const startLocalFunctionsTestnet = async (
     )
   }
 
-  const close = async (): Promise<void> => {
-    contracts.functionsMockCoordinatorContract.removeAllListeners('OracleRequest')
-    await server.close()
-  }
 
   return {
-    server,
     adminWallet: {
       address: admin.address,
       privateKey: admin.privateKey,
     },
     ...contracts,
     getFunds,
-    close,
   }
 }
 
