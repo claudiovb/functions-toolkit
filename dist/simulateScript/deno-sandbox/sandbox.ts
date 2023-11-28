@@ -470,12 +470,6 @@ try {
     return '0x' + hex
   }
 
-  console.log(
-    '\n' +
-      JSON.stringify({
-        success: arrayBufferToHex(result),
-      }),
-  )
 } catch (e: unknown) {
   let error: Error
   if (e instanceof Error) {

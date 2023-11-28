@@ -48,7 +48,6 @@ const startLocalFunctionsTestnet = async (admin, simulationConfigPath) => {
         const linkTx = await contracts.linkTokenContract.connect(admin).transfer(address, juelsAmount);
         await ethTx.wait(1);
         await linkTx.wait(1);
-        console.log(`Sent ${ethers_1.utils.formatEther(weiAmount.toString())} ETH and ${ethers_1.utils.formatEther(juelsAmount.toString())} LINK to ${address}`);
     };
     return {
         adminWallet: {
